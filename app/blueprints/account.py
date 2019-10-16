@@ -1,15 +1,16 @@
-from flask import Blueprint, request, jsonify, session
+from sanic import Blueprint
+from sanic.response import json
 
-account = Blueprint('account', __name__, url_prefix='/account')
+account = Blueprint('account', url_prefix='/account')
 
 
 @account.route('/login')
-def login():
+def login(request):
     return 'login';
     
     
 @account.route('/register')
-def register():
+def register(request):
     return 'register';
     
     

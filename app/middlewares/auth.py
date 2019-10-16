@@ -1,14 +1,58 @@
-from functools import wraps
+rom functools import wraps
+from app import *
 
-def auth():
-    def _auth(f):
-        @wraps(f)
-        def __auth(*args, **kwargs):
-            # just do here everything what you need
-            print('before req')
-            result = f(*args, **kwargs)
-            print('result: %s' % result)
-            print('after req')
-            return result
-        return __auth
-    return _auth
+
+def authenticate_by_email_and_password(email, password):
+    query = """
+    query($input: UserWhereUniqueInput!) {
+        user(where: $input) {
+            id
+          }
+      }
+    """
+    res = gql.query(query=query,variables={
+        'input':{
+            'email': email,
+            'password': password
+        }
+    })
+    
+    return res.json()
+    
+    
+def authenticate_by_email_and_password(username, password):
+    query = """
+    query($input: UserWhereUniqueInput!) {
+        user(where: $input) {
+            id
+          }
+      }
+    """
+    res = gql.query(query=query,variables={
+        'input':{
+            'username': username,
+            'password': password
+        }
+    })
+    
+    return res.json()
+
+def identity(payload):
+    user_id = payload['identity']
+    
+    query = """
+    query($input: UserWhereUniqueInput!) {
+        user(where: $input) {
+            id
+          }
+      }
+    """
+    res = gql.query(query=query,variables={
+        'input':{
+            'id': user_id,
+        }
+    })
+    
+    return res.json()
+
+

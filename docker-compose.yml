@@ -1,1 +1,55 @@
-
+version: '3'
+services:
+  prisma:
+    image: prismagraphql/prisma:1.34
+    restart: always
+    ports:
+        - 4466:4466
+    environment:
+      PRISMA_CONFIG: |
+        port: 4466
+        PRISMA_MANAGEMENT_API_SECRET=managementAPISecretKey
+        managementApiSecret: managementAPISecret
+        databases:
+           default:
+            connector: postgres
+            host: postgres
+            user: prisma
+            password: prisma
+            rawAccess: true
+            port: 5432
+            migrations: true
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+        - 5432:5432
+    environment:
+      POSTGRES_USER: prisma
+      POSTGRES_PASSWORD: prisma
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      
+#  flask:
+#    image: flask
+#    build:
+#      context: ./app
+#      dockerfile: Dockerfile
+#    volumes:
+#      - "./:/app"
+#  nginx:
+#    image: nginx
+#    build:
+#      context: ./nginx
+#      dockerfile: Dockerfile
+#    ports:
+#      - 5000:5000
+#    depends_on:
+#      - flask
+      
+volumes:
+  postgres:
+#  flask:
+  
+  
+  
