@@ -1,1 +1,21 @@
+# Specifies the HTTP endpoint of your Prisma API.
+endpoint: https://eu1.prisma.sh/daniel-cristian-fat-964bc7/demo/dev
 
+# Defines your models, each model is mapped to the database as a collection.
+datamodel: datamodel.prisma
+
+# Specifies the language and directory for the generated Prisma client.
+#generate:
+#  - generator: javascript-client
+#    output: ../prisma-client/
+
+# Ensures Prisma client is re-generated after a datamodel change.
+hooks:
+  post-deploy:
+    - prisma generate
+
+# Seeds initial data into the database by running a script.
+#seed:
+#  run: node ./prisma/seed.js
+
+secret: managementAPISecretKey

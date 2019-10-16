@@ -1,0 +1,79 @@
+#BEGIN models/user.prisma
+#########################
+
+
+type User {
+    id: ID! @id
+    username: String! @unique
+    email: String! @unique
+    password: String!
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+    role: Roles!
+    posts: [Post]
+}
+
+
+#END models/user.prisma
+#########################
+
+
+
+#BEGIN models/post.prisma
+#########################
+
+
+type Post {
+  id: ID! @id @unique
+  published: Boolean!
+  title: String!
+  content: String
+  lat: Float!
+  long: Float!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+
+
+#END models/post.prisma
+#########################
+
+
+
+#BEGIN models/query_storage.prisma
+#########################
+
+
+type QueryStorage {
+  id: ID! @unique @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String! @unique
+  description: String
+  query: String!
+  status: String! @default(value:"Development")
+}
+
+
+#END models/query_storage.prisma
+#########################
+
+
+
+#BEGIN models/roles.prisma
+#########################
+
+
+enum Roles {
+  USER
+  MODERATOR
+  ADMIN
+}
+
+
+#END models/roles.prisma
+#########################
+
+
+
