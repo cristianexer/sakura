@@ -10,11 +10,18 @@ app = Sanic(__name__)
 
 app.debug = True
 
-app.config['api_token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InNlcnZpY2UiOiJkZW1vQGRldiIsInJvbGVzIjpbImFkbWluIl19LCJpYXQiOjE1NzEyNTQwNTAsImV4cCI6MjU3MTg1ODg1MH0.cONlHOvJ0vHds4gHcZJUHOtjxrpgfqIUVxAD-qvWdAc' 
+app.config['prisma'] = {
+    'service' : 'demo@dev',
+    'roles': ['admin'],
+    'secret': 'managementAPISecretKey',
+    'endpoint': 'https://eu1.prisma.sh/daniel-cristian-fat-964bc7/demo/dev'
+}
 
-app.config['api_endpoint'] = 'https://eu1.prisma.sh/daniel-cristian-fat-964bc7/demo/dev'
-
-#jwt = JWT(app, authenticate_by_email_and_password, identity)
+app.config['sakura'] = {
+    'service': 'sakura@dev',
+    'secret': 'some_very_secret_thing',
+    'token_lifetime_minutes': 20
+}
 
 
 app.blueprint(account)

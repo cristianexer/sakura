@@ -1,12 +1,25 @@
 import requests
 from sanic.response import json
 from json import dumps
+from jwt import encode
+from datetime import datetime, timedelta
 
 class GraphQLClient:
     
-    def __init__(self,endpoint, token):
-        self.endpoint = endpoint
-        self.headers = {'Authorization': 'Bearer ' + token,'Content-Type': 'application/json'}
+    def __init__(self,prisma):
+        self.endpoint = prisma['endpoint']
+        d_now = datetime.now()
+        token = encode(
+            {
+            'data': {
+                'service': prisma['service'],
+                'roles': prisma['roles']
+                },
+            'iat': int(d_now.strftime("%s")),
+            'exp': int((d_now + timedelta(0,(60 * 5))).strftime("%s"))
+               }, prisma['secret'], algorithm='HS256')
+
+        self.headers = {'Authorization': 'Bearer ' + token.decode('ascii'),'Content-Type': 'application/json'}
         
         
     def query(self,query,variables=None):
@@ -29,7 +42,10 @@ class GraphQLClient:
         
         body = dict()
 
-        body['query'] = 'query{queryStorage(where:{name: "' + name + '"}){query}}'
+        body['query'] = 'query($q:String!){queryStorage(where:{name: $q }){query}}'
+        body['variables'] = {
+            'q': name
+        }
             
         remote_query = requests.post(self.endpoint, headers=self.headers, data=dumps(body))
         

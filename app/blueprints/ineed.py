@@ -12,10 +12,7 @@ ineed = Blueprint('ineed', url_prefix='/ineed')
 @ineed.route('/',methods=['POST'])
 async def need(request):
     
-    client = GraphQLClient(
-        endpoint=request.app.config['api_endpoint'],
-        token=request.app.config['api_token']
-        )
+    client = GraphQLClient(prisma=request.app.config.get('prisma'))
     
     body = request.json
     
@@ -27,17 +24,18 @@ async def need(request):
     
     if q:
         res = client.query(query=q,variables=variables)
-    
+        
     elif q_name:
         res = client.queryStorage(name=q_name,variables=variables)
     
     else:
         return json({
-            'response': False,
-            'error': 'You have to specify the `query` or the `query_name`.'
+            'error': 'Something went wrong.'
         },status=300)
     
-    
+    if res.get('errors',None):
+        res = res.get('errors')
+        
     return json(res,status=200)
 
 
